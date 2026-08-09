@@ -227,9 +227,6 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
             var p when p.Contains("DeepwaterChestRareHelmets", StringComparison.Ordinal) => IconPickerIndex.RareHelmetsChest,
             var p when p.Contains("DeepwaterChestRareGloves", StringComparison.Ordinal) => IconPickerIndex.RareGlovesChest,
             var p when p.Contains("DeepwaterChestRareBoots", StringComparison.Ordinal) => IconPickerIndex.RareBootsChest,
-            var p when p.Contains("GiantCoralChest", StringComparison.Ordinal) => IconPickerIndex.GiantCoralChest,
-            var p when p.Contains("CursedTreasureChestEncounter", StringComparison.Ordinal) => IconPickerIndex.CursedTreasureChestEncounter,
-            var p when p.Contains("BrinerotStoresChestEncounter", StringComparison.Ordinal) => IconPickerIndex.BrinerotStoresChestEncounter,
             var p when p.Contains("DeepwaterChestScarabs", StringComparison.Ordinal) => IconPickerIndex.ScarabChest,
             var p when p.Contains("DeepwaterChestStackedDecks", StringComparison.Ordinal) => IconPickerIndex.StackedDecksChest,
             var p when p.Contains("DeepwaterChestMaps", StringComparison.Ordinal) => IconPickerIndex.MapsChest,
@@ -344,7 +341,6 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
             if (entity == null || string.IsNullOrEmpty(entity.Path))
                 continue;
 
-            // Chart encounters are drawn live (MinimapText-style), not via the icon cache.
             if (IsChartEncounterPath(entity.Path))
                 continue;
 
@@ -592,9 +588,7 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
 
     public override void Render()
     {
-        // Chart encounters: fully independent of Handler / largePanelsOpen / icon cache.
-        // Copied 1:1 from MinimapText's Render gates + DrawMapLabel positioning.
-        DrawChartEncountersLikeMinimapText();
+        DrawChartEncounterLabels();
 
         DrawVoyageHighlights();
         var largePanelsOpen = GameController.IngameState.IngameUi.FullscreenPanels.Any(x => x.IsVisible) ||
@@ -1324,9 +1318,6 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
         IconPickerIndex.RareHelmetsChest => "Helmets",
         IconPickerIndex.RareGlovesChest => "Gloves",
         IconPickerIndex.RareBootsChest => "Boots",
-        IconPickerIndex.GiantCoralChest => "InstantChart",
-        IconPickerIndex.CursedTreasureChestEncounter => "GhostChart",
-        IconPickerIndex.BrinerotStoresChestEncounter => "BrinerotChart",
         IconPickerIndex.ScarabChest => "Scarabs",
         IconPickerIndex.StackedDecksChest => "Stacked Decks",
         IconPickerIndex.MapsChest => "Maps",
@@ -1352,51 +1343,54 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
         _ => "Other",
     };
 
-    private enum ChartEncounterKind
-    {
-        None,
-        GhostChart,
-        BrinerotChart,
-        InstantChart,
-    }
-
-    private static ChartEncounterKind GetChartEncounterKind(string path)
-    {
-        if (string.IsNullOrEmpty(path))
-            return ChartEncounterKind.None;
-        if (path.Contains("CursedTreasureChestEncounter", StringComparison.OrdinalIgnoreCase))
-            return ChartEncounterKind.GhostChart;
-        if (path.Contains("BrinerotStoresChestEncounter", StringComparison.OrdinalIgnoreCase))
-            return ChartEncounterKind.BrinerotChart;
-        if (path.Contains("GiantCoralChest", StringComparison.OrdinalIgnoreCase))
-            return ChartEncounterKind.InstantChart;
-        return ChartEncounterKind.None;
-    }
+    private const string GhostChartPath = "Metadata/Chests/LeagueDeepwater/CursedTreasureChestEncounter";
+    private const string BrinerotChartPath = "Metadata/Chests/LeagueDeepwater/BrinerotStoresChestEncounter";
+    private const string InstantChartPath = "Metadata/Chests/LeagueDeepwater/GiantCoralChest";
 
     private static bool IsChartEncounterPath(string path) =>
-        GetChartEncounterKind(path) != ChartEncounterKind.None;
+        TryGetChartEncounterLabel(path, out _);
 
-    private bool IsChartEncounterLabelEnabled(ChartEncounterKind kind) => kind switch
+    private static bool TryGetChartEncounterLabel(string path, out string label)
     {
-        ChartEncounterKind.GhostChart => Settings.IconSettings.ShowGhostChartLabels.Value,
-        ChartEncounterKind.BrinerotChart => Settings.IconSettings.ShowBrinerotChartLabels.Value,
-        ChartEncounterKind.InstantChart => Settings.IconSettings.ShowInstantChartLabels.Value,
+        label = null;
+        if (string.IsNullOrEmpty(path))
+            return false;
+
+        if (IsExactChestMetadata(path, GhostChartPath))
+        {
+            label = "GhostChart";
+            return true;
+        }
+
+        if (IsExactChestMetadata(path, BrinerotChartPath))
+        {
+            label = "BrinerotChart";
+            return true;
+        }
+
+        if (IsExactChestMetadata(path, InstantChartPath))
+        {
+            label = "InstantChart";
+            return true;
+        }
+
+        return false;
+    }
+
+    private static bool IsExactChestMetadata(string path, string chestPath) =>
+        path.Equals(chestPath, StringComparison.Ordinal)
+        || path.StartsWith(chestPath + "/", StringComparison.Ordinal)
+        || path.StartsWith(chestPath + "@", StringComparison.Ordinal);
+
+    private bool IsChartEncounterLabelEnabled(string label) => label switch
+    {
+        "GhostChart" => Settings.IconSettings.ShowGhostChartLabels.Value,
+        "BrinerotChart" => Settings.IconSettings.ShowBrinerotChartLabels.Value,
+        "InstantChart" => Settings.IconSettings.ShowInstantChartLabels.Value,
         _ => false,
     };
 
-    private static string GetChartEncounterLabel(ChartEncounterKind kind) => kind switch
-    {
-        ChartEncounterKind.GhostChart => "GhostChart",
-        ChartEncounterKind.BrinerotChart => "BrinerotChart",
-        ChartEncounterKind.InstantChart => "InstantChart",
-        _ => null,
-    };
-
-    /// <summary>
-    /// Chart encounters only. MinimapText-style gates + OnlyValidEntities + GetGridMapScreenPosition.
-    /// Independent of the normal icon cache/pipeline.
-    /// </summary>
-    private void DrawChartEncountersLikeMinimapText()
+    private void DrawChartEncounterLabels()
     {
         try
         {
@@ -1422,37 +1416,44 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
                 return;
             }
 
-            // Dedup by id — same chest can appear in awake + sleeping lists.
-            var drawn = new HashSet<uint>();
-            RenderChartEncounterEntityList(GameController.EntityListWrapper, drawn);
+            var awakeIds = CollectEntityIds(GameController.EntityListWrapper);
+            DrawChartEncounterLabelsFrom(GameController.EntityListWrapper, excludeIds: null);
+
             if (SleepingEntityParsingActive && GameController.SleepingEntityListWrapper != null)
-                RenderChartEncounterEntityList(GameController.SleepingEntityListWrapper, drawn);
+                DrawChartEncounterLabelsFrom(GameController.SleepingEntityListWrapper, excludeIds: awakeIds);
         }
         catch
         {
-            // ignored — same as MinimapText
         }
     }
 
-    private void RenderChartEncounterEntityList(EntityListWrapper wrapper, HashSet<uint> drawn)
+    private static HashSet<uint> CollectEntityIds(EntityListWrapper wrapper)
+    {
+        var ids = new HashSet<uint>();
+        var list = wrapper?.OnlyValidEntities;
+        if (list == null)
+            return ids;
+
+        foreach (var entity in list)
+        {
+            if (entity != null)
+                ids.Add(entity.Id);
+        }
+
+        return ids;
+    }
+
+    private void DrawChartEncounterLabelsFrom(EntityListWrapper wrapper, HashSet<uint> excludeIds)
     {
         if (wrapper?.OnlyValidEntities == null)
             return;
 
         foreach (var entity in wrapper.OnlyValidEntities)
         {
-            if (entity == null)
+            if (entity == null || (excludeIds != null && excludeIds.Contains(entity.Id)))
                 continue;
 
-            var kind = GetChartEncounterKind(entity.Path);
-            if (kind == ChartEncounterKind.None || !IsChartEncounterLabelEnabled(kind))
-                continue;
-
-            if (!drawn.Add(entity.Id))
-                continue;
-
-            var label = GetChartEncounterLabel(kind);
-            if (label == null)
+            if (!TryGetChartEncounterLabel(entity.Path, out var label) || !IsChartEncounterLabelEnabled(label))
                 continue;
 
             var mapPos = GameController.IngameState.Data.GetGridMapScreenPosition(entity.GridPosNum);
