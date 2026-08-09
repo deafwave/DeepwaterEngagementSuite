@@ -31,6 +31,14 @@ public class DeepwaterEngagementSuiteSettings : ISettings
     public const MapIconsIndex DefaultUniqueWeaponChestIcon = MapIconsIndex.RewardWeapons;
     public const MapIconsIndex DefaultUniqueArmourChestIcon = MapIconsIndex.RewardArmour;
     public const MapIconsIndex DefaultUniqueJewelleryChestIcon = MapIconsIndex.RewardJewellery;
+    public const MapIconsIndex DefaultRareRangedWeaponChestIcon = DefaultOtherChestIcon;
+    public const MapIconsIndex DefaultRareMeleeWeaponChestIcon = DefaultOtherChestIcon;
+    public const MapIconsIndex DefaultRareBodyArmourChestIcon = DefaultOtherChestIcon;
+    public const MapIconsIndex DefaultRareShieldChestIcon = DefaultOtherChestIcon;
+    public const MapIconsIndex DefaultRareJewelleryChestIcon = DefaultOtherChestIcon;
+    public const MapIconsIndex DefaultRareHelmetsChestIcon = DefaultOtherChestIcon;
+    public const MapIconsIndex DefaultRareGlovesChestIcon = DefaultOtherChestIcon;
+    public const MapIconsIndex DefaultRareBootsChestIcon = DefaultOtherChestIcon;
     public static readonly Color UniqueItemTint = new Color(175, 96, 37);
     public const MapIconsIndex DefaultScarabChestIcon = MapIconsIndex.RewardScarabs;
     public const MapIconsIndex DefaultStackedDecksChestIcon = MapIconsIndex.RewardDivinationCards;
@@ -113,6 +121,14 @@ public class DeepwaterEngagementSuiteSettings : ISettings
         IconPickerIndex.UniqueWeaponChest => DefaultUniqueWeaponChestIcon,
         IconPickerIndex.UniqueArmourChest => DefaultUniqueArmourChestIcon,
         IconPickerIndex.UniqueJewelleryChest => DefaultUniqueJewelleryChestIcon,
+        IconPickerIndex.RareRangedWeaponChest => DefaultRareRangedWeaponChestIcon,
+        IconPickerIndex.RareMeleeWeaponChest => DefaultRareMeleeWeaponChestIcon,
+        IconPickerIndex.RareBodyArmourChest => DefaultRareBodyArmourChestIcon,
+        IconPickerIndex.RareShieldChest => DefaultRareShieldChestIcon,
+        IconPickerIndex.RareJewelleryChest => DefaultRareJewelleryChestIcon,
+        IconPickerIndex.RareHelmetsChest => DefaultRareHelmetsChestIcon,
+        IconPickerIndex.RareGlovesChest => DefaultRareGlovesChestIcon,
+        IconPickerIndex.RareBootsChest => DefaultRareBootsChestIcon,
         IconPickerIndex.ScarabChest => DefaultScarabChestIcon,
         IconPickerIndex.StackedDecksChest => DefaultStackedDecksChestIcon,
         IconPickerIndex.MapsChest => DefaultMapsChestIcon,
@@ -254,6 +270,34 @@ public class IconSettings
     [Menu("Unique Jewellery", 0, 120)]
     public ToggleNode ShowUniqueJewelleryIcons { get; set; } = new ToggleNode(true);
 
+    [Menu("Rares", 125, CollapsedByDefault = true)]
+    [JsonIgnore]
+    public EmptyNode RaresHeader { get; set; }
+
+    [Menu("Bows", "Rare ranged weapon chests. Yellow text when enabled.", 0, 125)]
+    public ToggleNode ShowRareRangedWeaponIcons { get; set; } = new ToggleNode(true);
+
+    [Menu("Melee", "Rare melee weapon chests. Yellow text when enabled.", 0, 125)]
+    public ToggleNode ShowRareMeleeWeaponIcons { get; set; } = new ToggleNode(true);
+
+    [Menu("Body", "Rare body armour chests. Yellow text when enabled.", 0, 125)]
+    public ToggleNode ShowRareBodyArmourIcons { get; set; } = new ToggleNode(true);
+
+    [Menu("Shields", "Rare shield chests. Yellow text when enabled.", 0, 125)]
+    public ToggleNode ShowRareShieldIcons { get; set; } = new ToggleNode(true);
+
+    [Menu("Trinkets", "Rare jewellery chests. Yellow text when enabled.", 0, 125)]
+    public ToggleNode ShowRareJewelleryIcons { get; set; } = new ToggleNode(true);
+
+    [Menu("Helmets", "Rare helmet chests. Yellow text when enabled.", 0, 125)]
+    public ToggleNode ShowRareHelmetsIcons { get; set; } = new ToggleNode(true);
+
+    [Menu("Gloves", "Rare glove chests. Yellow text when enabled.", 0, 125)]
+    public ToggleNode ShowRareGlovesIcons { get; set; } = new ToggleNode(true);
+
+    [Menu("Boots", "Rare boot chests. Yellow text when enabled.", 0, 125)]
+    public ToggleNode ShowRareBootsIcons { get; set; } = new ToggleNode(true);
+
     [Menu("Altars", 130, CollapsedByDefault = true)]
     [JsonIgnore]
     public EmptyNode AltarsHeader { get; set; }
@@ -336,6 +380,14 @@ public class IconSettings
         IconPickerIndex.UniqueWeaponChest => ShowUniqueWeaponIcons.Value,
         IconPickerIndex.UniqueArmourChest => ShowUniqueArmourIcons.Value,
         IconPickerIndex.UniqueJewelleryChest => ShowUniqueJewelleryIcons.Value,
+        IconPickerIndex.RareRangedWeaponChest => ShowRareRangedWeaponIcons.Value,
+        IconPickerIndex.RareMeleeWeaponChest => ShowRareMeleeWeaponIcons.Value,
+        IconPickerIndex.RareBodyArmourChest => ShowRareBodyArmourIcons.Value,
+        IconPickerIndex.RareShieldChest => ShowRareShieldIcons.Value,
+        IconPickerIndex.RareJewelleryChest => ShowRareJewelleryIcons.Value,
+        IconPickerIndex.RareHelmetsChest => ShowRareHelmetsIcons.Value,
+        IconPickerIndex.RareGlovesChest => ShowRareGlovesIcons.Value,
+        IconPickerIndex.RareBootsChest => ShowRareBootsIcons.Value,
         IconPickerIndex.ScarabChest => ShowScarabChestIcons.Value,
         IconPickerIndex.StackedDecksChest => ShowStackedDeckIcons.Value,
         IconPickerIndex.MapsChest => ShowMapsChestIcons.Value,
@@ -442,6 +494,22 @@ public class TrailColorSettings
     public ColorNode UniqueArmour { get; set; } = new Color(175, 96, 37, 255);
     public ToggleNode ShowUniqueJewellery { get; set; } = new ToggleNode(true);
     public ColorNode UniqueJewellery { get; set; } = new Color(175, 96, 37, 255);
+    public ToggleNode ShowRareRangedWeapon { get; set; } = new ToggleNode(true);
+    public ColorNode RareRangedWeapon { get; set; } = new Color(180, 180, 180, 255);
+    public ToggleNode ShowRareMeleeWeapon { get; set; } = new ToggleNode(true);
+    public ColorNode RareMeleeWeapon { get; set; } = new Color(180, 180, 180, 255);
+    public ToggleNode ShowRareBodyArmour { get; set; } = new ToggleNode(true);
+    public ColorNode RareBodyArmour { get; set; } = new Color(180, 180, 180, 255);
+    public ToggleNode ShowRareShield { get; set; } = new ToggleNode(true);
+    public ColorNode RareShield { get; set; } = new Color(180, 180, 180, 255);
+    public ToggleNode ShowRareJewellery { get; set; } = new ToggleNode(true);
+    public ColorNode RareJewellery { get; set; } = new Color(180, 180, 180, 255);
+    public ToggleNode ShowRareHelmets { get; set; } = new ToggleNode(true);
+    public ColorNode RareHelmets { get; set; } = new Color(180, 180, 180, 255);
+    public ToggleNode ShowRareGloves { get; set; } = new ToggleNode(true);
+    public ColorNode RareGloves { get; set; } = new Color(180, 180, 180, 255);
+    public ToggleNode ShowRareBoots { get; set; } = new ToggleNode(true);
+    public ColorNode RareBoots { get; set; } = new Color(180, 180, 180, 255);
     public ToggleNode ShowScarabs { get; set; } = new ToggleNode(true);
     public ColorNode Scarabs { get; set; } = new Color(200, 150, 255, 255);
     public ToggleNode ShowStackedDecks { get; set; } = new ToggleNode(true);
@@ -491,6 +559,14 @@ public class TrailColorSettings
         IconPickerIndex.UniqueWeaponChest => ShowUniqueWeapon.Value,
         IconPickerIndex.UniqueArmourChest => ShowUniqueArmour.Value,
         IconPickerIndex.UniqueJewelleryChest => ShowUniqueJewellery.Value,
+        IconPickerIndex.RareRangedWeaponChest => ShowRareRangedWeapon.Value,
+        IconPickerIndex.RareMeleeWeaponChest => ShowRareMeleeWeapon.Value,
+        IconPickerIndex.RareBodyArmourChest => ShowRareBodyArmour.Value,
+        IconPickerIndex.RareShieldChest => ShowRareShield.Value,
+        IconPickerIndex.RareJewelleryChest => ShowRareJewellery.Value,
+        IconPickerIndex.RareHelmetsChest => ShowRareHelmets.Value,
+        IconPickerIndex.RareGlovesChest => ShowRareGloves.Value,
+        IconPickerIndex.RareBootsChest => ShowRareBoots.Value,
         IconPickerIndex.ScarabChest => ShowScarabs.Value,
         IconPickerIndex.StackedDecksChest => ShowStackedDecks.Value,
         IconPickerIndex.MapsChest => ShowMaps.Value,
@@ -523,6 +599,14 @@ public class TrailColorSettings
         IconPickerIndex.UniqueWeaponChest => UniqueWeapon.Value,
         IconPickerIndex.UniqueArmourChest => UniqueArmour.Value,
         IconPickerIndex.UniqueJewelleryChest => UniqueJewellery.Value,
+        IconPickerIndex.RareRangedWeaponChest => RareRangedWeapon.Value,
+        IconPickerIndex.RareMeleeWeaponChest => RareMeleeWeapon.Value,
+        IconPickerIndex.RareBodyArmourChest => RareBodyArmour.Value,
+        IconPickerIndex.RareShieldChest => RareShield.Value,
+        IconPickerIndex.RareJewelleryChest => RareJewellery.Value,
+        IconPickerIndex.RareHelmetsChest => RareHelmets.Value,
+        IconPickerIndex.RareGlovesChest => RareGloves.Value,
+        IconPickerIndex.RareBootsChest => RareBoots.Value,
         IconPickerIndex.ScarabChest => Scarabs.Value,
         IconPickerIndex.StackedDecksChest => StackedDecks.Value,
         IconPickerIndex.MapsChest => Maps.Value,

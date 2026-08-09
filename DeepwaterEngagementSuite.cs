@@ -219,6 +219,14 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
             var p when p.Contains("DeepwaterAnchorUniqueWeapon", StringComparison.Ordinal) => IconPickerIndex.UniqueWeaponChest,
             var p when p.Contains("DeepwaterAnchorUniqueArmour", StringComparison.Ordinal) => IconPickerIndex.UniqueArmourChest,
             var p when p.Contains("DeepwaterAnchorUniqueJewellery", StringComparison.Ordinal) => IconPickerIndex.UniqueJewelleryChest,
+            var p when p.Contains("DeepwaterChestRareRangedWeapon", StringComparison.Ordinal) => IconPickerIndex.RareRangedWeaponChest,
+            var p when p.Contains("DeepwaterChestRareMeleeWeapon", StringComparison.Ordinal) => IconPickerIndex.RareMeleeWeaponChest,
+            var p when p.Contains("DeepwaterChestRareBodyArmour", StringComparison.Ordinal) => IconPickerIndex.RareBodyArmourChest,
+            var p when p.Contains("DeepwaterChestRareShield", StringComparison.Ordinal) => IconPickerIndex.RareShieldChest,
+            var p when p.Contains("DeepwaterChestRareJewellery", StringComparison.Ordinal) => IconPickerIndex.RareJewelleryChest,
+            var p when p.Contains("DeepwaterChestRareHelmets", StringComparison.Ordinal) => IconPickerIndex.RareHelmetsChest,
+            var p when p.Contains("DeepwaterChestRareGloves", StringComparison.Ordinal) => IconPickerIndex.RareGlovesChest,
+            var p when p.Contains("DeepwaterChestRareBoots", StringComparison.Ordinal) => IconPickerIndex.RareBootsChest,
             var p when p.Contains("DeepwaterChestScarabs", StringComparison.Ordinal) => IconPickerIndex.ScarabChest,
             var p when p.Contains("DeepwaterChestStackedDecks", StringComparison.Ordinal) => IconPickerIndex.StackedDecksChest,
             var p when p.Contains("DeepwaterChestMaps", StringComparison.Ordinal) => IconPickerIndex.MapsChest,
@@ -721,6 +729,35 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
                         }
 
                         var mapSettings = icons.IconMapping.GetValueOrDefault(chestType, new IconDisplaySettings());
+                        var drawOnMap = mapSettings.ShowOnMap;
+                        var drawInWorld = mapSettings.ShowInWorld;
+
+                        if (IsTextOnlyChest(chestType))
+                        {
+                            var label = GetEntityDisplayName(chestType);
+                            if (drawOnMap && _largeMapOpen)
+                            {
+                                Graphics.DrawTextWithBackground(
+                                    label,
+                                    GetEntityPosOnMapScreen(e),
+                                    Color.Yellow,
+                                    FontAlign.Center,
+                                    Color.Black);
+                            }
+
+                            if (drawInWorld)
+                            {
+                                Graphics.DrawTextWithBackground(
+                                    label,
+                                    Camera.WorldToScreen(e.Pos),
+                                    Color.Yellow,
+                                    FontAlign.Center,
+                                    Color.Black);
+                            }
+
+                            continue;
+                        }
+
                         var icon = mapSettings.Icon ?? DeepwaterEngagementSuiteSettings.GetDefaultIcon(chestType);
                         var tint = mapSettings.Tint ?? DeepwaterEngagementSuiteSettings.GetDefaultTint(chestType);
                         if (e.SleepingOnly)
@@ -729,8 +766,6 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
                         }
 
                         var sizeScale = mapSettings.SizeScale ?? DeepwaterEngagementSuiteSettings.GetDefaultIconSizeScale(chestType);
-                        var drawOnMap = mapSettings.ShowOnMap;
-                        var drawInWorld = mapSettings.ShowInWorld;
 
                         if (drawOnMap)
                         {
@@ -1244,6 +1279,16 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
         return Bubbles.Any(x => x.Position.DistanceLessThanOrEqual(target, x.Radius));
     }
 
+    private static bool IsTextOnlyChest(IconPickerIndex type) => type is
+        IconPickerIndex.RareRangedWeaponChest or
+        IconPickerIndex.RareMeleeWeaponChest or
+        IconPickerIndex.RareBodyArmourChest or
+        IconPickerIndex.RareShieldChest or
+        IconPickerIndex.RareJewelleryChest or
+        IconPickerIndex.RareHelmetsChest or
+        IconPickerIndex.RareGlovesChest or
+        IconPickerIndex.RareBootsChest;
+
     private static string GetEntityDisplayName(IconPickerIndex type) => type switch
     {
         IconPickerIndex.BottledItemChest => "Bottled Item",
@@ -1254,6 +1299,14 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
         IconPickerIndex.UniqueWeaponChest => "Unique Weapon",
         IconPickerIndex.UniqueArmourChest => "Unique Armour",
         IconPickerIndex.UniqueJewelleryChest => "Unique Jewellery",
+        IconPickerIndex.RareRangedWeaponChest => "Bows",
+        IconPickerIndex.RareMeleeWeaponChest => "Melee",
+        IconPickerIndex.RareBodyArmourChest => "Body",
+        IconPickerIndex.RareShieldChest => "Shields",
+        IconPickerIndex.RareJewelleryChest => "Trinkets",
+        IconPickerIndex.RareHelmetsChest => "Helmets",
+        IconPickerIndex.RareGlovesChest => "Gloves",
+        IconPickerIndex.RareBootsChest => "Boots",
         IconPickerIndex.ScarabChest => "Scarabs",
         IconPickerIndex.StackedDecksChest => "Stacked Decks",
         IconPickerIndex.MapsChest => "Maps",
