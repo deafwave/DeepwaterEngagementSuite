@@ -227,6 +227,9 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
             var p when p.Contains("DeepwaterChestRareHelmets", StringComparison.Ordinal) => IconPickerIndex.RareHelmetsChest,
             var p when p.Contains("DeepwaterChestRareGloves", StringComparison.Ordinal) => IconPickerIndex.RareGlovesChest,
             var p when p.Contains("DeepwaterChestRareBoots", StringComparison.Ordinal) => IconPickerIndex.RareBootsChest,
+            var p when p.Contains("GiantCoralChest", StringComparison.Ordinal) => IconPickerIndex.GiantCoralChest,
+            var p when p.Contains("CursedTreasureChestEncounter", StringComparison.Ordinal) => IconPickerIndex.CursedTreasureChestEncounter,
+            var p when p.Contains("BrinerotStoresChestEncounter", StringComparison.Ordinal) => IconPickerIndex.BrinerotStoresChestEncounter,
             var p when p.Contains("DeepwaterChestScarabs", StringComparison.Ordinal) => IconPickerIndex.ScarabChest,
             var p when p.Contains("DeepwaterChestStackedDecks", StringComparison.Ordinal) => IconPickerIndex.StackedDecksChest,
             var p when p.Contains("DeepwaterChestMaps", StringComparison.Ordinal) => IconPickerIndex.MapsChest,
@@ -339,6 +342,10 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
                      EntityType.Chest, EntityType.Terrain, EntityType.IngameIcon))
         {
             if (entity == null || string.IsNullOrEmpty(entity.Path))
+                continue;
+
+            // Chart encounters are drawn live (MinimapText-style), not via the icon cache.
+            if (IsChartEncounterPath(entity.Path))
                 continue;
 
             if (GetEntityType(entity.Path) == ExpeditionEntityType.None)
@@ -585,6 +592,10 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
 
     public override void Render()
     {
+        // Chart encounters: fully independent of Handler / largePanelsOpen / icon cache.
+        // Copied 1:1 from MinimapText's Render gates + DrawMapLabel positioning.
+        DrawChartEncountersLikeMinimapText();
+
         DrawVoyageHighlights();
         var largePanelsOpen = GameController.IngameState.IngameUi.FullscreenPanels.Any(x => x.IsVisible) ||
                           GameController.IngameState.IngameUi.LargePanels.Any(x => x.IsVisible);
@@ -689,7 +700,7 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
                 Graphics.DrawTextWithBackground("Start", pos, Color.Black);
             }
         }
-        
+
         if (Settings.PlannerSettings.ClearSearchHotkey.PressedOnce())
         {
             ClearSearch();
@@ -735,12 +746,13 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
                         if (IsTextOnlyChest(chestType))
                         {
                             var label = GetEntityDisplayName(chestType);
+                            var textColor = GetTextOnlyChestColor(chestType);
                             if (drawOnMap && _largeMapOpen)
                             {
                                 Graphics.DrawTextWithBackground(
                                     label,
                                     GetEntityPosOnMapScreen(e),
-                                    Color.Yellow,
+                                    textColor,
                                     FontAlign.Center,
                                     Color.Black);
                             }
@@ -750,7 +762,7 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
                                 Graphics.DrawTextWithBackground(
                                     label,
                                     Camera.WorldToScreen(e.Pos),
-                                    Color.Yellow,
+                                    textColor,
                                     FontAlign.Center,
                                     Color.Black);
                             }
@@ -1202,6 +1214,9 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
         if (entity == null || string.IsNullOrEmpty(entity.Path))
             return;
 
+        if (IsChartEncounterPath(entity.Path))
+            return;
+
         if ((entity.Type is EntityType.Chest or EntityType.Terrain or EntityType.IngameIcon)
             && GetEntityType(entity.Path) != ExpeditionEntityType.None
             && !IsEntityCompleted(entity, GetChestType(entity.Path)))
@@ -1289,6 +1304,8 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
         IconPickerIndex.RareGlovesChest or
         IconPickerIndex.RareBootsChest;
 
+    private static Color GetTextOnlyChestColor(IconPickerIndex type) => Color.Yellow;
+
     private static string GetEntityDisplayName(IconPickerIndex type) => type switch
     {
         IconPickerIndex.BottledItemChest => "Bottled Item",
@@ -1307,6 +1324,9 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
         IconPickerIndex.RareHelmetsChest => "Helmets",
         IconPickerIndex.RareGlovesChest => "Gloves",
         IconPickerIndex.RareBootsChest => "Boots",
+        IconPickerIndex.GiantCoralChest => "InstantChart",
+        IconPickerIndex.CursedTreasureChestEncounter => "GhostChart",
+        IconPickerIndex.BrinerotStoresChestEncounter => "BrinerotChart",
         IconPickerIndex.ScarabChest => "Scarabs",
         IconPickerIndex.StackedDecksChest => "Stacked Decks",
         IconPickerIndex.MapsChest => "Maps",
@@ -1331,6 +1351,114 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
         IconPickerIndex.PointerTarget => "Undiscovered Target",
         _ => "Other",
     };
+
+    private enum ChartEncounterKind
+    {
+        None,
+        GhostChart,
+        BrinerotChart,
+        InstantChart,
+    }
+
+    private static ChartEncounterKind GetChartEncounterKind(string path)
+    {
+        if (string.IsNullOrEmpty(path))
+            return ChartEncounterKind.None;
+        if (path.Contains("CursedTreasureChestEncounter", StringComparison.OrdinalIgnoreCase))
+            return ChartEncounterKind.GhostChart;
+        if (path.Contains("BrinerotStoresChestEncounter", StringComparison.OrdinalIgnoreCase))
+            return ChartEncounterKind.BrinerotChart;
+        if (path.Contains("GiantCoralChest", StringComparison.OrdinalIgnoreCase))
+            return ChartEncounterKind.InstantChart;
+        return ChartEncounterKind.None;
+    }
+
+    private static bool IsChartEncounterPath(string path) =>
+        GetChartEncounterKind(path) != ChartEncounterKind.None;
+
+    private bool IsChartEncounterLabelEnabled(ChartEncounterKind kind) => kind switch
+    {
+        ChartEncounterKind.GhostChart => Settings.IconSettings.ShowGhostChartLabels.Value,
+        ChartEncounterKind.BrinerotChart => Settings.IconSettings.ShowBrinerotChartLabels.Value,
+        ChartEncounterKind.InstantChart => Settings.IconSettings.ShowInstantChartLabels.Value,
+        _ => false,
+    };
+
+    private static string GetChartEncounterLabel(ChartEncounterKind kind) => kind switch
+    {
+        ChartEncounterKind.GhostChart => "GhostChart",
+        ChartEncounterKind.BrinerotChart => "BrinerotChart",
+        ChartEncounterKind.InstantChart => "InstantChart",
+        _ => null,
+    };
+
+    /// <summary>
+    /// Chart encounters only. MinimapText-style gates + OnlyValidEntities + GetGridMapScreenPosition.
+    /// Independent of the normal icon cache/pipeline.
+    /// </summary>
+    private void DrawChartEncountersLikeMinimapText()
+    {
+        try
+        {
+            if (GameController.Area.CurrentArea == null
+                || GameController.Area.CurrentArea.IsTown
+                || GameController.Area.CurrentArea.IsHideout
+                || GameController.IsLoading
+                || !GameController.InGame
+                || GameController.Game.IngameState.IngameUi.StashElement.IsVisibleLocal
+                || !GameController.Game.IngameState.IngameUi.Map.LargeMap.IsVisible)
+            {
+                return;
+            }
+
+            var icons = Settings?.IconSettings;
+            if (icons == null)
+                return;
+
+            if (!icons.ShowGhostChartLabels.Value
+                && !icons.ShowBrinerotChartLabels.Value
+                && !icons.ShowInstantChartLabels.Value)
+            {
+                return;
+            }
+
+            // Dedup by id — same chest can appear in awake + sleeping lists.
+            var drawn = new HashSet<uint>();
+            RenderChartEncounterEntityList(GameController.EntityListWrapper, drawn);
+            if (SleepingEntityParsingActive && GameController.SleepingEntityListWrapper != null)
+                RenderChartEncounterEntityList(GameController.SleepingEntityListWrapper, drawn);
+        }
+        catch
+        {
+            // ignored — same as MinimapText
+        }
+    }
+
+    private void RenderChartEncounterEntityList(EntityListWrapper wrapper, HashSet<uint> drawn)
+    {
+        if (wrapper?.OnlyValidEntities == null)
+            return;
+
+        foreach (var entity in wrapper.OnlyValidEntities)
+        {
+            if (entity == null)
+                continue;
+
+            var kind = GetChartEncounterKind(entity.Path);
+            if (kind == ChartEncounterKind.None || !IsChartEncounterLabelEnabled(kind))
+                continue;
+
+            if (!drawn.Add(entity.Id))
+                continue;
+
+            var label = GetChartEncounterLabel(kind);
+            if (label == null)
+                continue;
+
+            var mapPos = GameController.IngameState.Data.GetGridMapScreenPosition(entity.GridPosNum);
+            Graphics.DrawTextWithBackground(label, mapPos, Color.Cyan, FontAlign.Center, Color.Black);
+        }
+    }
 
     private static bool IsEntityCompleted(Entity entity, IconPickerIndex type)
     {

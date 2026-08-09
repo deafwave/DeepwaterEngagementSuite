@@ -212,6 +212,19 @@ public class IconSettings
     [Menu("Map icon size", 0, 100)]
     public RangeNode<int> MapIconSize { get; set; } = new RangeNode<int>(30, 15, 200);
 
+    [Menu("Chart labels", 105, CollapsedByDefault = true)]
+    [JsonIgnore]
+    public EmptyNode ChartLabelsHeader { get; set; }
+
+    [Menu("GhostChart", "Cursed Treasure chests. Cyan map text on large map.", 0, 105)]
+    public ToggleNode ShowGhostChartLabels { get; set; } = new ToggleNode(true);
+
+    [Menu("BrinerotChart", "Brinerot Stores chests. Cyan map text on large map.", 0, 105)]
+    public ToggleNode ShowBrinerotChartLabels { get; set; } = new ToggleNode(true);
+
+    [Menu("InstantChart", "Giant Coral chests. Cyan map text on large map.", 0, 105)]
+    public ToggleNode ShowInstantChartLabels { get; set; } = new ToggleNode(true);
+
     [Menu("Treasure", 110, CollapsedByDefault = true)]
     [JsonIgnore]
     public EmptyNode TreasureHeader { get; set; }
@@ -388,6 +401,10 @@ public class IconSettings
         IconPickerIndex.RareHelmetsChest => ShowRareHelmetsIcons.Value,
         IconPickerIndex.RareGlovesChest => ShowRareGlovesIcons.Value,
         IconPickerIndex.RareBootsChest => ShowRareBootsIcons.Value,
+        // Chart encounters use MinimapText-style labels, not the icon pipeline.
+        IconPickerIndex.GiantCoralChest => ShowInstantChartLabels.Value,
+        IconPickerIndex.CursedTreasureChestEncounter => ShowGhostChartLabels.Value,
+        IconPickerIndex.BrinerotStoresChestEncounter => ShowBrinerotChartLabels.Value,
         IconPickerIndex.ScarabChest => ShowScarabChestIcons.Value,
         IconPickerIndex.StackedDecksChest => ShowStackedDeckIcons.Value,
         IconPickerIndex.MapsChest => ShowMapsChestIcons.Value,
