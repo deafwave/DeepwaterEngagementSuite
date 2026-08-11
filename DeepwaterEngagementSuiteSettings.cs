@@ -966,6 +966,11 @@ public class VoyageStrategySettings
     [Menu("Infinite Lanterns", "Highlight boards with 2+ Infinite Lantern borders. Default off.", 0, 600)]
     public ToggleNode InfiniteLanterns { get; set; } = new ToggleNode(false);
 
+    [Menu("Shortest Path",
+        "Minimize time across several voyages: shortest visit path, zero internal dead ends. Banks surplus Cross/Tee/Corner shapes so later voyages stay pathable. Ignores currency weights and borders. Default off.",
+        0, 600)]
+    public ToggleNode ShortestPath { get; set; } = new ToggleNode(false);
+
     [Menu("Save holds", 610, CollapsedByDefault = true)]
     [JsonIgnore]
     public EmptyNode SaveHoldsHeader { get; set; }
@@ -1020,6 +1025,7 @@ public class VoyageStrategySettings
         CenterSpecialty: CenterSpecialty.Value,
         TreasureAnchors: TreasureAnchors.Value,
         InfiniteLanterns: InfiniteLanterns.Value,
+        ShortestPath: ShortestPath.Value,
         SaveKishara: SaveKishara.Value,
         SaveNoEquipment: SaveNoEquipment.Value,
         SaveFractured: SaveFractured.Value,

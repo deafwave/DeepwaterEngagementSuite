@@ -87,6 +87,7 @@ public static class VoyagePlacementRules
         int SavedUniqueRingCount,
         int SavedUniqueAmulet2Count,
         int SavedUniqueAmulet1Count,
+        int SavedShortestPathPremiumCount = 0,
         bool NoConsumeActive = false,
         IReadOnlyList<string> ActiveStrategies = null);
 
@@ -126,6 +127,7 @@ public static class VoyagePlacementRules
             ctx.GetSaved(SaveCountKeys.UniqueRing),
             ctx.GetSaved(SaveCountKeys.UniqueAmulet2),
             ctx.GetSaved(SaveCountKeys.UniqueAmulet1),
+            ctx.GetSaved(SaveCountKeys.ShortestPathPremium),
             NoConsumeActive: ctx.NoConsumeActive,
             ActiveStrategies: ctx.ActiveStrategies);
 

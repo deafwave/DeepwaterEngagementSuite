@@ -7,6 +7,7 @@ public sealed record VoyageStrategyOptions(
     bool CenterSpecialty = true,
     bool TreasureAnchors = true,
     bool InfiniteLanterns = false,
+    bool ShortestPath = false,
     int SaveKishara = ChartIds.MaxSavedKishara,
     int SaveNoEquipment = ChartIds.MaxSavedNoEquipment,
     int SaveFractured = ChartIds.MaxSavedFractured,

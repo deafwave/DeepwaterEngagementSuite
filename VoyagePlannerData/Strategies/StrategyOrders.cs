@@ -22,5 +22,6 @@ public static class StrategyOrders
     public const int SaveStarfish = 1050;
     public const int SaveUniqueAmulet2 = 1051;
     public const int SaveUniqueAmulet1 = 1052;
+    public const int ShortestPath = 1090;
     public const int ActiveLabels = 1100;
 }

@@ -22,4 +22,5 @@ public static class SaveCountKeys
     public const string UniqueRing = "UniqueRing";
     public const string UniqueAmulet2 = "UniqueAmulet2";
     public const string UniqueAmulet1 = "UniqueAmulet1";
+    public const string ShortestPathPremium = "ShortestPathPremium";
 }

@@ -30,6 +30,7 @@ public static class PlacementPipeline
         new CenterSpecialtySaveStrategy(),
         new CenterOnlyJewelrySaveStrategy(),
 
+        new ShortestPathStrategy(),
         new ActiveStrategyLabelsStrategy(),
     ];
 

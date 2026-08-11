@@ -1729,6 +1729,8 @@ public partial class DeepwaterEngagementSuite
             savedBits.Add($"{placement.SavedRareVoyageCount} voyage rares");
         if (placement.SavedLostMessageCount > 0)
             savedBits.Add($"{placement.SavedLostMessageCount} Lost Message");
+        if (placement.SavedShortestPathPremiumCount > 0)
+            savedBits.Add($"{placement.SavedShortestPathPremiumCount} path shapes (later voyages)");
         return savedBits;
     }
 
@@ -1739,7 +1741,7 @@ public partial class DeepwaterEngagementSuite
 
         var savedBits = FormatSavedChartBits(placement);
         if (savedBits.Count > 0)
-            DebugWindow.LogMsg($"Voyage: saved {string.Join(", ", savedBits)} for better borders", 5);
+            DebugWindow.LogMsg($"Voyage: saved {string.Join(", ", savedBits)} for later voyages / better boards", 5);
         if (placement.Locks.Count > 0)
             DebugWindow.LogMsg($"Voyage: {placement.Locks.Count} strategy lock(s), solver fills the rest", 5);
     }

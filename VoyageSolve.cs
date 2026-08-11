@@ -38,7 +38,8 @@ public sealed class VoyageSolve
             Puzzle = new VoyagePuzzle(
                 Placement.Pieces,
                 tileBorders,
-                locks);
+                locks,
+                OptimizeShortestPath: strategyOptions?.ShortestPath == true);
             Scorer = new VoyageScorer(Puzzle);
 
             VoyageSolutionResult last = null;

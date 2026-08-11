@@ -35,9 +35,11 @@ public class VoyageScorer
     private readonly List<double> _globalsScratch = [];
     private readonly Dictionary<ModifierTag, int> _maskIndex;
     private readonly IReadOnlyList<BorderEffect>[] _bordersByCell = new IReadOnlyList<BorderEffect>[CellCount];
+    private readonly bool _optimizeShortestPath;
 
     public VoyageScorer(VoyagePuzzle puzzle)
     {
+        _optimizeShortestPath = puzzle.OptimizeShortestPath;
         var pieces = puzzle.AvailablePieces;
 
         var maskIndex = new Dictionary<ModifierTag, int>();
@@ -183,6 +185,25 @@ public class VoyageScorer
 
     private double ScoreInternal(MapPiecePlacement[,] grid, double[,] cellsOut)
     {
+        if (_optimizeShortestPath)
+        {
+            var pathScore = VoyagePathMetrics.ScoreGrid(grid);
+            if (cellsOut != null)
+            {
+                var metrics = VoyagePathMetrics.AnalyzeTopology(VoyagePathMetrics.BuildInGridMask(grid));
+                for (var r = 0; r < GridSize; r++)
+                for (var c = 0; c < GridSize; c++)
+                {
+                    
+                    cellsOut[r, c] = metrics.IsConnected
+                        ? pathScore / CellCount
+                        : double.NegativeInfinity;
+                }
+            }
+
+            return pathScore;
+        }
+
         var conn = _connScratch;
         for (var cell = 0; cell < CellCount; cell++)
             conn[cell] = grid[cell / GridSize, cell % GridSize].Connections.CountConnections();
@@ -234,6 +255,12 @@ public class VoyageScorer
 
     public double UpperBound(MapPiecePlacement[,] grid, bool[] pieceUsed, int filledCount)
     {
+        if (_optimizeShortestPath)
+        {
+            
+            return 10_000_000.0 - 8 * 100_000.0 + 12;
+        }
+
         var conn = _connScratch;
         for (var cell = 0; cell < CellCount; cell++)
         {
@@ -319,6 +346,26 @@ public class VoyageScorer
 
     public List<ScoreContribution>[,] Explain(MapPiecePlacement[,] grid)
     {
+        if (_optimizeShortestPath)
+        {
+            var metrics = VoyagePathMetrics.AnalyzeTopology(VoyagePathMetrics.BuildInGridMask(grid));
+            var pathScore = VoyagePathMetrics.ScoreTopology(VoyagePathMetrics.BuildInGridMask(grid));
+            var resultPath = new List<ScoreContribution>[GridSize, GridSize];
+            for (var r = 0; r < GridSize; r++)
+            for (var c = 0; c < GridSize; c++)
+            {
+                resultPath[r, c] =
+                [
+                    new ScoreContribution(
+                        $"Path L={metrics.VisitPathLength} dead-ends={metrics.InternalDeadEnds} edges={metrics.InGridEdgeCount}",
+                        -1, r, c, true, pathScore / CellCount,
+                        1, [], 1, [], pathScore / CellCount),
+                ];
+            }
+
+            return resultPath;
+        }
+
         var conn = new int[CellCount];
         for (var cell = 0; cell < CellCount; cell++)
             conn[cell] = grid[cell / GridSize, cell % GridSize].Connections.CountConnections();

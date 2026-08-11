@@ -133,6 +133,7 @@ public sealed class VoyageStateDump
         public bool CenterSpecialty { get; set; } = true;
         public bool TreasureAnchors { get; set; } = true;
         public bool InfiniteLanterns { get; set; }
+        public bool ShortestPath { get; set; }
         public int SaveKishara { get; set; } = ChartIds.MaxSavedKishara;
         public int SaveNoEquipment { get; set; } = ChartIds.MaxSavedNoEquipment;
         public int SaveFractured { get; set; } = ChartIds.MaxSavedFractured;
@@ -155,6 +156,7 @@ public sealed class VoyageStateDump
                 CenterSpecialty = o.CenterSpecialty,
                 TreasureAnchors = o.TreasureAnchors,
                 InfiniteLanterns = o.InfiniteLanterns,
+                ShortestPath = o.ShortestPath,
                 SaveKishara = o.SaveKishara,
                 SaveNoEquipment = o.SaveNoEquipment,
                 SaveFractured = o.SaveFractured,
@@ -175,6 +177,7 @@ public sealed class VoyageStateDump
             CenterSpecialty,
             TreasureAnchors,
             InfiniteLanterns,
+            ShortestPath,
             SaveKishara,
             SaveNoEquipment,
             SaveFractured,

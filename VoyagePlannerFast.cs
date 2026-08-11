@@ -213,6 +213,7 @@ public class VoyagePlannerFast
             return sum;
         }
 
+        var optimizeShortestPath = puzzle.OptimizeShortestPath;
         var weight = new double[n][];
         var eligible = new int[n][];
         var rotation = new byte[n][];
@@ -227,6 +228,13 @@ public class VoyagePlannerFast
 
             for (var cell = 0; cell < Cells; cell++)
             {
+                if (optimizeShortestPath)
+                {
+                    
+                    weight[i][cell] = 0;
+                    continue;
+                }
+
                 double w = 0;
                 foreach (var mod in piece.Modifiers)
                 {
@@ -280,6 +288,7 @@ public class VoyagePlannerFast
 
         var reachable = new int[topologies.Length][];
         var bound = new double[topologies.Length];
+        var topoScore = optimizeShortestPath ? new double[topologies.Length] : null;
 
         for (var t = 0; t < topologies.Length; t++)
         {
@@ -318,19 +327,40 @@ public class VoyagePlannerFast
             for (var cell = 0; cell < Cells && feasible; cell++)
             {
                 var best = double.NegativeInfinity;
+                var any = false;
                 for (var i = 0; i < n; i++)
                 {
                     if ((eligible[i][cell] >> topo[cell] & 1) == 0) continue;
                     allow[i] |= 1 << cell;
+                    any = true;
                     if (weight[i][cell] > best) best = weight[i][cell];
                 }
 
-                if (double.IsNegativeInfinity(best)) feasible = false;
-                else total += best;
+                if (!any)
+                    feasible = false;
+                else if (!optimizeShortestPath)
+                    total += best;
             }
 
             reachable[t] = allow;
-            bound[t] = feasible ? total : double.NegativeInfinity;
+            if (!feasible)
+            {
+                bound[t] = double.NegativeInfinity;
+                if (topoScore != null)
+                    topoScore[t] = double.NegativeInfinity;
+                continue;
+            }
+
+            if (optimizeShortestPath)
+            {
+                var pathScore = VoyagePathMetrics.ScoreTopology(topo);
+                topoScore[t] = pathScore;
+                bound[t] = pathScore;
+            }
+            else
+            {
+                bound[t] = total;
+            }
         }
 
         var order = Enumerable.Range(0, topologies.Length).OrderByDescending(t => bound[t]).ToArray();
@@ -356,7 +386,10 @@ public class VoyagePlannerFast
             }
 
             explored++;
-            var score = BestAssignment(n, weight, reachable[t], dpPrev, dpNext, choice, assignment);
+            var assignScore = BestAssignment(n, weight, reachable[t], dpPrev, dpNext, choice, assignment);
+            if (double.IsNegativeInfinity(assignScore)) continue;
+
+            var score = optimizeShortestPath ? topoScore[t] : assignScore;
             if (double.IsNegativeInfinity(score)) continue;
             if (top.Count >= topN && score <= top[^1].TotalScore) continue;
 

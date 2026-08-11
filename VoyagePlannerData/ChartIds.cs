@@ -70,6 +70,15 @@ public static class ChartIds
     public const int MaxSavedUniqueAmulet2 = 0;
     public const int MaxSavedUniqueAmulet1 = 0;
 
+    
+    public const int CellsPerVoyage = 9;
+    
+    public const int MinKeepCrossShortestPath = 1;
+    
+    public const int MinKeepTeeShortestPath = 2;
+    
+    public const int MinKeepTwoWayShortestPath = 3;
+
     public const string PelagicRoomName = "Pelagic Abyss";
     public const string ClamRoomName = "Clam-infested Shelf";
     public const string AnchorfieldRoomName = "Anchorfield";
