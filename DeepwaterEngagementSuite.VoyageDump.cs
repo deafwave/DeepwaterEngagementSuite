@@ -45,7 +45,7 @@ public partial class DeepwaterEngagementSuite
         dump.BorderModsSource = BorderModsFromDataUsable(dump.RawBorderMods)
             ? "Data.BorderMods"
             : dump.RawBorderModsUi.Any(t => !string.IsNullOrWhiteSpace(t))
-                ? "UI 3->10->i.Tooltip"
+                ? "UI 3->10->i->1->0.Text"
                 : "none";
 
         CaptureTiles(tree, dump);

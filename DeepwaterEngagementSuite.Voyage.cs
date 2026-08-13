@@ -822,8 +822,8 @@ public partial class DeepwaterEngagementSuite
             }
 
             
-            var tooltip = slot.Tooltip;
-            var raw = tooltip?.TextNoTags ?? tooltip?.Text ?? "";
+            var textEl = slot.GetChildFromIndices(1, 0);
+            var raw = textEl?.Text ?? "";
             texts.Add(NormalizeBorderUiText(raw));
         }
 
@@ -964,7 +964,7 @@ public partial class DeepwaterEngagementSuite
             {
                 Id = id,
                 DisplayText = display,
-                Source = fromApi ? "Data.BorderMods" : "UI 3->10->i.Tooltip",
+                Source = fromApi ? "Data.BorderMods" : "UI 3->10->i->1->0.Text",
             };
         }
 
