@@ -491,76 +491,283 @@ public class SleepingEntitySettings
 [Submenu(CollapsedByDefault = true)]
 public class TrailColorSettings
 {
+    [Menu("Treasure", 220, CollapsedByDefault = true)]
+    [JsonIgnore]
+    public EmptyNode TreasureHeader { get; set; }
+
+    [Menu("Bottled Item", 0, 220)]
     public ToggleNode ShowBottledItem { get; set; } = new ToggleNode(true);
+
+    [Menu("Bottled Item color", 0, 220)]
     public ColorNode BottledItem { get; set; } = new Color(255, 215, 0, 255);
+
+    [Menu("Gold Treasure", 0, 220)]
     public ToggleNode ShowGoldTreasure { get; set; } = new ToggleNode(true);
+
+    [Menu("Gold Treasure color", 0, 220)]
     public ColorNode GoldTreasure { get; set; } = new Color(255, 215, 0, 255);
+
+    [Menu("Clam Treasure", 0, 220)]
     public ToggleNode ShowClamTreasure { get; set; } = new ToggleNode(true);
+
+    [Menu("Clam Treasure color", 0, 220)]
     public ColorNode ClamTreasure { get; set; } = new Color(255, 255, 100, 255);
+
+    [Menu("Currency chest", 0, 220)]
     public ToggleNode ShowCurrency { get; set; } = new ToggleNode(true);
+
+    [Menu("Currency chest color", 0, 220)]
     public ColorNode Currency { get; set; } = new Color(255, 255, 255, 255);
+
+    [Menu("Opulent Currency", 0, 220)]
     public ToggleNode ShowOpulentCurrency { get; set; } = new ToggleNode(true);
+
+    [Menu("Opulent Currency color", 0, 220)]
     public ColorNode OpulentCurrency { get; set; } = new Color(255, 170, 0, 255);
-    public ToggleNode ShowUniqueWeapon { get; set; } = new ToggleNode(true);
-    public ColorNode UniqueWeapon { get; set; } = new Color(175, 96, 37, 255);
-    public ToggleNode ShowUniqueArmour { get; set; } = new ToggleNode(true);
-    public ColorNode UniqueArmour { get; set; } = new Color(175, 96, 37, 255);
-    public ToggleNode ShowUniqueJewellery { get; set; } = new ToggleNode(true);
-    public ColorNode UniqueJewellery { get; set; } = new Color(175, 96, 37, 255);
-    public ToggleNode ShowRareRangedWeapon { get; set; } = new ToggleNode(true);
-    public ColorNode RareRangedWeapon { get; set; } = new Color(180, 180, 180, 255);
-    public ToggleNode ShowRareMeleeWeapon { get; set; } = new ToggleNode(true);
-    public ColorNode RareMeleeWeapon { get; set; } = new Color(180, 180, 180, 255);
-    public ToggleNode ShowRareBodyArmour { get; set; } = new ToggleNode(true);
-    public ColorNode RareBodyArmour { get; set; } = new Color(180, 180, 180, 255);
-    public ToggleNode ShowRareShield { get; set; } = new ToggleNode(true);
-    public ColorNode RareShield { get; set; } = new Color(180, 180, 180, 255);
-    public ToggleNode ShowRareJewellery { get; set; } = new ToggleNode(true);
-    public ColorNode RareJewellery { get; set; } = new Color(180, 180, 180, 255);
-    public ToggleNode ShowRareHelmets { get; set; } = new ToggleNode(true);
-    public ColorNode RareHelmets { get; set; } = new Color(180, 180, 180, 255);
-    public ToggleNode ShowRareGloves { get; set; } = new ToggleNode(true);
-    public ColorNode RareGloves { get; set; } = new Color(180, 180, 180, 255);
-    public ToggleNode ShowRareBoots { get; set; } = new ToggleNode(true);
-    public ColorNode RareBoots { get; set; } = new Color(180, 180, 180, 255);
+
+    [Menu("Gemcutter chest", 0, 220)]
+    public ToggleNode ShowGemcutter { get; set; } = new ToggleNode(true);
+
+    [Menu("Gemcutter chest color", 0, 220)]
+    public ColorNode Gemcutter { get; set; } = new Color(80, 220, 160, 255);
+
+    [Menu("Scarab chest", 0, 220)]
     public ToggleNode ShowScarabs { get; set; } = new ToggleNode(true);
+
+    [Menu("Scarab chest color", 0, 220)]
     public ColorNode Scarabs { get; set; } = new Color(200, 150, 255, 255);
+
+    [Menu("Stacked Decks", 0, 220)]
     public ToggleNode ShowStackedDecks { get; set; } = new ToggleNode(true);
+
+    [Menu("Stacked Decks color", 0, 220)]
     public ColorNode StackedDecks { get; set; } = new Color(100, 200, 255, 255);
-    public ToggleNode ShowMaps { get; set; } = new ToggleNode(true);
+
+    [Menu("Maps chest", "Off by default.", 0, 220)]
+    public ToggleNode ShowMaps { get; set; } = new ToggleNode(false);
+
+    [Menu("Maps chest color", 0, 220)]
     public ColorNode Maps { get; set; } = new Color(200, 200, 200, 255);
+
+    [Menu("Allflame Embers", 0, 220)]
     public ToggleNode ShowAllflameEmbers { get; set; } = new ToggleNode(true);
+
+    [Menu("Allflame Embers color", 0, 220)]
     public ColorNode AllflameEmbers { get; set; } = new Color(255, 100, 50, 255);
-    public ToggleNode ShowCursedDucat { get; set; } = new ToggleNode(true);
-    public ColorNode CursedDucat { get; set; } = new Color(255, 200, 50, 255);
-    public ToggleNode ShowRandomDucat { get; set; } = new ToggleNode(true);
-    public ColorNode RandomDucat { get; set; } = new Color(255, 200, 50, 255);
-    public ToggleNode ShowHazardBoat { get; set; } = new ToggleNode(true);
-    public ColorNode HazardBoat { get; set; } = new Color(255, 200, 50, 255);
+
+    [Menu("Izaro", 0, 220)]
     public ToggleNode ShowIzaro { get; set; } = new ToggleNode(true);
+
+    [Menu("Izaro color", 0, 220)]
     public ColorNode Izaro { get; set; } = new Color(255, 255, 0, 255);
+
+    [Menu("Uniques", 230, CollapsedByDefault = true)]
+    [JsonIgnore]
+    public EmptyNode UniquesHeader { get; set; }
+
+    [Menu("Unique Weapon", 0, 230)]
+    public ToggleNode ShowUniqueWeapon { get; set; } = new ToggleNode(true);
+
+    [Menu("Unique Weapon color", 0, 230)]
+    public ColorNode UniqueWeapon { get; set; } = new Color(175, 96, 37, 255);
+
+    [Menu("Unique Armour", 0, 230)]
+    public ToggleNode ShowUniqueArmour { get; set; } = new ToggleNode(true);
+
+    [Menu("Unique Armour color", 0, 230)]
+    public ColorNode UniqueArmour { get; set; } = new Color(175, 96, 37, 255);
+
+    [Menu("Unique Jewellery", 0, 230)]
+    public ToggleNode ShowUniqueJewellery { get; set; } = new ToggleNode(true);
+
+    [Menu("Unique Jewellery color", 0, 230)]
+    public ColorNode UniqueJewellery { get; set; } = new Color(175, 96, 37, 255);
+
+    [Menu("Rares", 240, CollapsedByDefault = true)]
+    [JsonIgnore]
+    public EmptyNode RaresHeader { get; set; }
+
+    [Menu("Bows", "Rare ranged weapon chests.", 0, 240)]
+    public ToggleNode ShowRareRangedWeapon { get; set; } = new ToggleNode(true);
+
+    [Menu("Bows color", 0, 240)]
+    public ColorNode RareRangedWeapon { get; set; } = new Color(180, 180, 180, 255);
+
+    [Menu("Melee", "Rare melee weapon chests.", 0, 240)]
+    public ToggleNode ShowRareMeleeWeapon { get; set; } = new ToggleNode(true);
+
+    [Menu("Melee color", 0, 240)]
+    public ColorNode RareMeleeWeapon { get; set; } = new Color(180, 180, 180, 255);
+
+    [Menu("Body", "Rare body armour chests.", 0, 240)]
+    public ToggleNode ShowRareBodyArmour { get; set; } = new ToggleNode(true);
+
+    [Menu("Body color", 0, 240)]
+    public ColorNode RareBodyArmour { get; set; } = new Color(180, 180, 180, 255);
+
+    [Menu("Shields", "Rare shield chests.", 0, 240)]
+    public ToggleNode ShowRareShield { get; set; } = new ToggleNode(true);
+
+    [Menu("Shields color", 0, 240)]
+    public ColorNode RareShield { get; set; } = new Color(180, 180, 180, 255);
+
+    [Menu("Trinkets", "Rare jewellery chests.", 0, 240)]
+    public ToggleNode ShowRareJewellery { get; set; } = new ToggleNode(true);
+
+    [Menu("Trinkets color", 0, 240)]
+    public ColorNode RareJewellery { get; set; } = new Color(180, 180, 180, 255);
+
+    [Menu("Helmets", "Rare helmet chests.", 0, 240)]
+    public ToggleNode ShowRareHelmets { get; set; } = new ToggleNode(true);
+
+    [Menu("Helmets color", 0, 240)]
+    public ColorNode RareHelmets { get; set; } = new Color(180, 180, 180, 255);
+
+    [Menu("Gloves", "Rare glove chests.", 0, 240)]
+    public ToggleNode ShowRareGloves { get; set; } = new ToggleNode(true);
+
+    [Menu("Gloves color", 0, 240)]
+    public ColorNode RareGloves { get; set; } = new Color(180, 180, 180, 255);
+
+    [Menu("Boots", "Rare boot chests.", 0, 240)]
+    public ToggleNode ShowRareBoots { get; set; } = new ToggleNode(true);
+
+    [Menu("Boots color", 0, 240)]
+    public ColorNode RareBoots { get; set; } = new Color(180, 180, 180, 255);
+
+    [Menu("Altars", 250, CollapsedByDefault = true)]
+    [JsonIgnore]
+    public EmptyNode AltarsHeader { get; set; }
+
+    [Menu("Crab", 0, 250)]
     public ToggleNode ShowAltarCrab { get; set; } = new ToggleNode(true);
+
+    [Menu("Crab color", 0, 250)]
     public ColorNode AltarCrab { get; set; } = new Color(50, 200, 50, 255);
+
+    [Menu("Octopus", 0, 250)]
     public ToggleNode ShowAltarOctopus { get; set; } = new ToggleNode(true);
+
+    [Menu("Octopus color", 0, 250)]
     public ColorNode AltarOctopus { get; set; } = new Color(160, 100, 50, 255);
+
+    [Menu("Puffer Fish", 0, 250)]
     public ToggleNode ShowAltarPufferFish { get; set; } = new ToggleNode(true);
+
+    [Menu("Puffer Fish color", 0, 250)]
     public ColorNode AltarPufferFish { get; set; } = new Color(255, 20, 180, 255);
+
+    [Menu("Coral", 0, 250)]
     public ToggleNode ShowAltarCoral { get; set; } = new ToggleNode(true);
+
+    [Menu("Coral color", 0, 250)]
     public ColorNode AltarCoral { get; set; } = new Color(60, 140, 255, 255);
+
+    [Menu("Fish", 0, 250)]
     public ToggleNode ShowAltarFish { get; set; } = new ToggleNode(true);
+
+    [Menu("Fish color", 0, 250)]
     public ColorNode AltarFish { get; set; } = new Color(255, 220, 40, 255);
+
+    [Menu("Unknown altars", "Any DeepwaterAltar* / DeepwaterSacrificeAltarUpgrade path not listed above.", 0, 250)]
     public ToggleNode ShowAltarUnknown { get; set; } = new ToggleNode(true);
+
+    [Menu("Unknown altars color", 0, 250)]
     public ColorNode AltarUnknown { get; set; } = new Color(80, 220, 100, 255);
-    public ToggleNode ShowTormentedSpirit { get; set; } = new ToggleNode(true);
-    public ColorNode TormentedSpirit { get; set; } = new Color(0, 255, 100, 255);
+
+    [Menu("Encounters", 260, CollapsedByDefault = true)]
+    [JsonIgnore]
+    public EmptyNode EncountersHeader { get; set; }
+
+    [Menu("Lantern Replenish", 0, 260)]
     public ToggleNode ShowLanternReplenish { get; set; } = new ToggleNode(true);
+
+    [Menu("Lantern Replenish color", 0, 260)]
     public ColorNode LanternReplenish { get; set; } = new Color(100, 200, 255, 255);
-    public ToggleNode ShowGoldenLantern { get; set; } = new ToggleNode(true);
-    public ColorNode GoldenLantern { get; set; } = new Color(255, 215, 0, 255);
+
+    [Menu("Infused Coral", 0, 260)]
     public ToggleNode ShowInfusedCoral { get; set; } = new ToggleNode(true);
+
+    [Menu("Infused Coral color", 0, 260)]
     public ColorNode InfusedCoral { get; set; } = new Color(255, 90, 180, 255);
+
+    [Menu("Golden Lantern", "Off by default.", 0, 260)]
+    public ToggleNode ShowGoldenLantern { get; set; } = new ToggleNode(false);
+
+    [Menu("Golden Lantern color", 0, 260)]
+    public ColorNode GoldenLantern { get; set; } = new Color(255, 215, 0, 255);
+
+    [Menu("Tormented Spirit", "Off by default.", 0, 260)]
+    public ToggleNode ShowTormentedSpirit { get; set; } = new ToggleNode(false);
+
+    [Menu("Tormented Spirit color", 0, 260)]
+    public ColorNode TormentedSpirit { get; set; } = new Color(0, 255, 100, 255);
+
+    [Menu("Strongboxes", 270, CollapsedByDefault = true)]
+    [JsonIgnore]
+    public EmptyNode StrongboxesHeader { get; set; }
+
+    [Menu("Arcanist", "Off by default.", 0, 270)]
+    public ToggleNode ShowStrongboxArcanist { get; set; } = new ToggleNode(false);
+
+    [Menu("Arcanist color", 0, 270)]
+    public ColorNode StrongboxArcanist { get; set; } = new Color(200, 200, 255, 255);
+
+    [Menu("Diviner", "Off by default.", 0, 270)]
+    public ToggleNode ShowStrongboxDiviner { get; set; } = new ToggleNode(false);
+
+    [Menu("Diviner color", 0, 270)]
+    public ColorNode StrongboxDiviner { get; set; } = new Color(100, 200, 255, 255);
+
+    [Menu("Scarab", "Off by default.", 0, 270)]
+    public ToggleNode ShowStrongboxScarab { get; set; } = new ToggleNode(false);
+
+    [Menu("Scarab color", 0, 270)]
+    public ColorNode StrongboxScarab { get; set; } = new Color(200, 150, 255, 255);
+
+    [Menu("Sulphur", 280, CollapsedByDefault = true)]
+    [JsonIgnore]
+    public EmptyNode SulphurHeader { get; set; }
+
+    [Menu("Base / Large / Huge", "Dead Man's Sulphur chests.", 0, 280)]
+    public ToggleNode ShowDeadmansSulphur { get; set; } = new ToggleNode(true);
+
+    [Menu("Base / Large / Huge color", 0, 280)]
+    public ColorNode DeadmansSulphur { get; set; } = new Color(120, 220, 120, 255);
+
+    [Menu("Small", "Off by default.", 0, 280)]
+    public ToggleNode ShowDeadmansSulphurSmall { get; set; } = new ToggleNode(false);
+
+    [Menu("Small color", 0, 280)]
+    public ColorNode DeadmansSulphurSmall { get; set; } = new Color(120, 220, 120, 255);
+
+    [Menu("Other", 290, CollapsedByDefault = true)]
+    [JsonIgnore]
+    public EmptyNode OtherHeader { get; set; }
+
+    [Menu("Other chests", 0, 290)]
     public ToggleNode ShowOther { get; set; } = new ToggleNode(true);
+
+    [Menu("Other chests color", 0, 290)]
     public ColorNode Other { get; set; } = new Color(180, 180, 180, 255);
+
+    [Menu("Cursed Ducat", "Off by default.", 0, 290)]
+    public ToggleNode ShowCursedDucat { get; set; } = new ToggleNode(false);
+
+    [Menu("Cursed Ducat color", 0, 290)]
+    public ColorNode CursedDucat { get; set; } = new Color(255, 200, 50, 255);
+
+    [Menu("Random Ducat", "Off by default.", 0, 290)]
+    public ToggleNode ShowRandomDucat { get; set; } = new ToggleNode(false);
+
+    [Menu("Random Ducat color", 0, 290)]
+    public ColorNode RandomDucat { get; set; } = new Color(255, 200, 50, 255);
+
+    [Menu("Hazard Boat", "Off by default.", 0, 290)]
+    public ToggleNode ShowHazardBoat { get; set; } = new ToggleNode(false);
+
+    [Menu("Hazard Boat color", 0, 290)]
+    public ColorNode HazardBoat { get; set; } = new Color(255, 200, 50, 255);
 
     public bool IsEnabled(IconPickerIndex type) => type switch
     {
@@ -569,6 +776,7 @@ public class TrailColorSettings
         IconPickerIndex.ClamTreasureChest => ShowClamTreasure.Value,
         IconPickerIndex.CurrencyTreasureChest => ShowCurrency.Value,
         IconPickerIndex.CurrencyTreasureChestOpulent => ShowOpulentCurrency.Value,
+        IconPickerIndex.CurrencyGemcuttersChest => ShowGemcutter.Value,
         IconPickerIndex.UniqueWeaponChest => ShowUniqueWeapon.Value,
         IconPickerIndex.UniqueArmourChest => ShowUniqueArmour.Value,
         IconPickerIndex.UniqueJewelleryChest => ShowUniqueJewellery.Value,
@@ -598,6 +806,13 @@ public class TrailColorSettings
         IconPickerIndex.LanternReplenishEncounter => ShowLanternReplenish.Value,
         IconPickerIndex.GoldenLanternEncounter => ShowGoldenLantern.Value,
         IconPickerIndex.InfusedCoralEncounter => ShowInfusedCoral.Value,
+        IconPickerIndex.StrongboxArcanist => ShowStrongboxArcanist.Value,
+        IconPickerIndex.StrongboxDivination => ShowStrongboxDiviner.Value,
+        IconPickerIndex.StrongboxScarab => ShowStrongboxScarab.Value,
+        IconPickerIndex.DeadMansSulphurSmall => ShowDeadmansSulphurSmall.Value,
+        IconPickerIndex.DeadMansSulphurBase => ShowDeadmansSulphur.Value,
+        IconPickerIndex.DeadMansSulphurLarge => ShowDeadmansSulphur.Value,
+        IconPickerIndex.DeadMansSulphurHuge => ShowDeadmansSulphur.Value,
         IconPickerIndex.OtherChests => ShowOther.Value,
         _ => true,
     };
@@ -609,6 +824,7 @@ public class TrailColorSettings
         IconPickerIndex.ClamTreasureChest => ClamTreasure.Value,
         IconPickerIndex.CurrencyTreasureChest => Currency.Value,
         IconPickerIndex.CurrencyTreasureChestOpulent => OpulentCurrency.Value,
+        IconPickerIndex.CurrencyGemcuttersChest => Gemcutter.Value,
         IconPickerIndex.UniqueWeaponChest => UniqueWeapon.Value,
         IconPickerIndex.UniqueArmourChest => UniqueArmour.Value,
         IconPickerIndex.UniqueJewelleryChest => UniqueJewellery.Value,
@@ -638,6 +854,13 @@ public class TrailColorSettings
         IconPickerIndex.LanternReplenishEncounter => LanternReplenish.Value,
         IconPickerIndex.GoldenLanternEncounter => GoldenLantern.Value,
         IconPickerIndex.InfusedCoralEncounter => InfusedCoral.Value,
+        IconPickerIndex.StrongboxArcanist => StrongboxArcanist.Value,
+        IconPickerIndex.StrongboxDivination => StrongboxDiviner.Value,
+        IconPickerIndex.StrongboxScarab => StrongboxScarab.Value,
+        IconPickerIndex.DeadMansSulphurSmall => DeadmansSulphurSmall.Value,
+        IconPickerIndex.DeadMansSulphurBase => DeadmansSulphur.Value,
+        IconPickerIndex.DeadMansSulphurLarge => DeadmansSulphur.Value,
+        IconPickerIndex.DeadMansSulphurHuge => DeadmansSulphur.Value,
         IconPickerIndex.OtherChests => Other.Value,
         _ => fallback,
     };
