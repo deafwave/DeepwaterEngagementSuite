@@ -89,6 +89,9 @@ public class DeepwaterEngagementSuiteSettings : ISettings
     [Menu("Voyage")]
     public VoyageSettings VoyageSettings { get; set; } = new VoyageSettings();
 
+    [Menu("Grid Tracker")]
+    public GridTrackerSettings GridTrackerSettings { get; set; } = new GridTrackerSettings();
+
     [IgnoreMenu]
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public SleepingEntitySettings SleepingEntitySettings
@@ -486,6 +489,28 @@ public class TrailSettings
 public class SleepingEntitySettings
 {
     public ToggleNode Enabled { get; set; } = new ToggleNode(false);
+}
+
+[Submenu(CollapsedByDefault = true)]
+public class GridTrackerSettings
+{
+    [Menu("Enable grid tracker")]
+    public ToggleNode Enabled { get; set; } = new ToggleNode(false);
+
+    [Menu("Show in normal maps", "Draws the tracker outside deepwater so the region detection can be checked without spending a voyage.")]
+    public ToggleNode DebugMode { get; set; } = new ToggleNode(false);
+
+    [Menu("Show planned score heat", "Shades each cell by the per-cell score of the voyage solution that was placed.")]
+    public ToggleNode ShowPlanHeat { get; set; } = new ToggleNode(true);
+
+    [Menu("Window width")]
+    public RangeNode<int> WindowSize { get; set; } = new RangeNode<int>(400, 200, 1000);
+
+    [Menu("Grid color")]
+    public ColorNode GridColor { get; set; } = new Color(255, 255, 255, 160);
+
+    [Menu("Trail color")]
+    public ColorNode PathColor { get; set; } = new Color(0, 200, 255, 200);
 }
 
 [Submenu(CollapsedByDefault = true)]

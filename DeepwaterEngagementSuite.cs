@@ -167,6 +167,7 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
         _cachedEntities.Clear();
         _soundAlertedEntityIds.Clear();
         ResetTrailTracking();
+        GridTrackReset();
         _zoneCleared = false;
         _pathfindingData = GameController.IngameState.Data.RawPathfindingData;
         _areaDimensions = GameController.IngameState.Data.AreaDimensions;
@@ -306,6 +307,8 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
 
     public override Job Tick()
     {
+        GridTrackTick(); // runs outside deepwater too, for the tracker's debug mode
+
         if (Handler == null)
         {
             return null;
@@ -593,6 +596,11 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
         DrawVoyageHighlights();
         var largePanelsOpen = GameController.IngameState.IngameUi.FullscreenPanels.Any(x => x.IsVisible) ||
                           GameController.IngameState.IngameUi.LargePanels.Any(x => x.IsVisible);
+
+        if (!largePanelsOpen)
+        {
+            DrawGridTracker(); // before the Handler check: the debug mode draws in normal maps too
+        }
 
         if (!largePanelsOpen && Settings.CurrencyReminderSettings.Enabled)
         {
