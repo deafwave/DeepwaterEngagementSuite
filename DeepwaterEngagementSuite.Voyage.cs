@@ -45,6 +45,12 @@ public partial class DeepwaterEngagementSuite
     private string _voyageBoardFingerprint;
     private int _voyageSolveGeneration;
 
+    // Per-cell scores of the solution on screen, snapshotted while the board is still open:
+    // closing it invalidates _result and _uiScorer, and the grid tracker needs these in the zone
+    // afterwards. Survives AreaChange on purpose.
+    private double[,] _plannedCellScores;
+    private VoyageSolution _plannedCellScoresSource;
+
     private const int VoyageChartStableFramesRequired = 12;
 
     public List<NormalInventoryItem> GetAvailableCharts()
@@ -1120,6 +1126,28 @@ public partial class DeepwaterEngagementSuite
             _voyageSolving = false;
     }
 
+    /// <summary>
+    /// Keeps <see cref="_plannedCellScores"/> in step with the solution being shown. Memoised on
+    /// the solution instance, so picking a different one recomputes and redrawing does not.
+    /// </summary>
+    private void SnapshotPlannedCellScores(VoyageSolution solution)
+    {
+        if (ReferenceEquals(_plannedCellScoresSource, solution) || _uiScorer is not { } scorer)
+        {
+            return;
+        }
+
+        try
+        {
+            _plannedCellScores = scorer.CellScores(solution.Grid);
+            _plannedCellScoresSource = solution;
+        }
+        catch
+        {
+            // scoring is best effort here; the tracker simply draws no heat
+        }
+    }
+
     private static string BuildVoyageBoardFingerprint(VoyageWindow tree)
     {
         var parts = new List<string>();
@@ -1280,6 +1308,7 @@ public partial class DeepwaterEngagementSuite
 
         _selectedSolutionIndex = Math.Clamp(_selectedSolutionIndex, 0, _result.Solutions.Count - 1);
         var currentSolution = _result.Solutions[_selectedSolutionIndex];
+        SnapshotPlannedCellScores(currentSolution);
 
         var asciiArt = BuildAsciiGrid(currentSolution.Grid, tiles);
 
