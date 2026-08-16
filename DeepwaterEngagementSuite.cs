@@ -1307,6 +1307,7 @@ public partial class DeepwaterEngagementSuite : BaseSettingsPlugin<DeepwaterEnga
         IconPickerIndex.ClamTreasureChest => "Clam Treasure",
         IconPickerIndex.CurrencyTreasureChest => "Currency",
         IconPickerIndex.CurrencyTreasureChestOpulent => "Opulent Currency",
+        IconPickerIndex.CurrencyGemcuttersChest => "Gemcutter chest",
         IconPickerIndex.UniqueWeaponChest => "Unique Weapon",
         IconPickerIndex.UniqueArmourChest => "Unique Armour",
         IconPickerIndex.UniqueJewelleryChest => "Unique Jewellery",
